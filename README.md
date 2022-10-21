@@ -285,7 +285,7 @@ def generate_launch_description():
    ])
 ```
 
-## 7. 8 Environment Variables
+## 7. Environment Variables
 
 Now let's construct fixed_broadcaster.launch.py, the final launch file in our package.
 
@@ -335,9 +335,13 @@ Build the package and start the top-level launch file using the following comman
 ros2 launch launch_tutorial launch_turtlesim.launch.py
 ```
 
+![image](https://user-images.githubusercontent.com/92040822/197096815-775d19ad-e263-49ae-9584-21a383707d55.png)
+
+
 Use the teleop node to command the turtle1.
 
 ```
 ros2 run turtlesim turtle_teleop_key
 ```
 
+![image](https://user-images.githubusercontent.com/92040822/197095974-bbf82568-6e32-4d3a-a4c1-0b78056ef3d3.png)
