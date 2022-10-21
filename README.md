@@ -345,3 +345,112 @@ ros2 run turtlesim turtle_teleop_key
 ```
 
 ![image](https://user-images.githubusercontent.com/92040822/197095974-bbf82568-6e32-4d3a-a4c1-0b78056ef3d3.png)
+
+# Introducing tf2
+
+The objective is to run a turtlesim demo and use a multi-robot example to demonstrate some of the potential of tf2.
+
+## Installing the demo
+
+Install the demonstration packages and any prerequisites.
+
+```
+sudo apt-get install ros-foxy-turtle-tf2-py ros-foxy-tf2-tools ros-foxy-tf-transformations
+```
+
+![image](https://user-images.githubusercontent.com/92040822/197098236-a4aee543-1864-4b00-955e-20eee30d9478.png)
+
+## Running the demo
+
+Open a new terminal and source your ROS 2 installation after installing the turtle_tf2_py instruction package. then issue the following command:
+
+```
+ros2 launch turtle_tf2_py turtle_tf2_demo.launch.py
+```
+
+The turtle simulation will begin with two turtles.
+
+![image](https://user-images.githubusercontent.com/92040822/197098789-ee6878bf-dc2e-426d-a70a-e2aac8ef7c27.png)
+
+You should enter the following command into the second terminal window:
+
+```
+ros2 run turtlesim turtle_teleop_key
+```
+
+You may observe that one turtle follows the turtle you are driving around repeatedly.
+
+![image](https://user-images.githubusercontent.com/92040822/197099203-2e9b655d-fca0-4405-85a6-92d0aaabfc70.png)
+
+
+## What is taking place?
+
+The three coordinate frames in this demonstration: a world frame, a turtle1 frame, and a turtle2 frame were made using the tf2 library. In this lesson, the turtle coordinate frames are published by a tf2 broadcaster, and the turtle coordinate frames are then compared by a tf2 listener, which then causes one turtle to follow the other.
+
+## tf2 tools
+
+We can examine what tf2 is doing in the background using tf2 tools.
+
+## 1. Using view_frames
+
+view_frames generates a graphic of the frames that tf2 is transmitting over ROS.
+
+```
+ros2 run tf2_tools view_frames.py
+```
+
+You will see:
+
+```
+Listening to tf data during 5 seconds...
+Generating graph in frames.pdf file...
+```
+
+![image](https://user-images.githubusercontent.com/92040822/197099940-12999863-fbfb-471f-a9ad-1d8fa4b6719e.png)
+
+## 2. Using tf2_echo
+
+The transform between any two frames broadcast over ROS is reported by the function tf2_echo.
+
+Usage:
+
+```
+ros2 run tf2_ros tf2_echo [reference_frame] [target_frame]
+```
+
+![image](https://user-images.githubusercontent.com/92040822/197100357-86c5d287-2474-42bf-8839-f3f073c11f17.png)
+
+Let’s look at the transform of the turtle2 frame with respect to turtle1 frame which is equivalent to:
+
+```
+ros2 run tf2_ros tf2_echo turtle2 turtle1
+```
+
+The transform will be visible as soon as the tf2 echo listener receives the frames sent via ROS2.
+
+```
+At time 1622031731.625364060
+- Translation: [2.796, 1.039, 0.000]
+- Rotation: in Quaternion [0.000, 0.000, 0.202, 0.979]
+At time 1622031732.614745114
+- Translation: [1.608, 0.250, 0.000]
+- Rotation: in Quaternion [0.000, 0.000, 0.032, 0.999]
+```
+
+![image](https://user-images.githubusercontent.com/92040822/197100423-ac259658-f63f-41ef-848f-248bc91d1492.png)
+
+You can vary the transform as you maneuver your turtle around by moving the two turtles in relation to one another.
+
+## rviz and tf2
+
+Rviz is a visualization tool that is helpful for looking at tf2 frames. Let's use rviz to inspect our turtle frames. Let's start rviz using the -d option and the turtle_rviz.rviz configuration file:
+
+```
+ros2 run rviz2 rviz2 -d $(ros2 pkg prefix --share turtle_tf2_py)/rviz/turtle_rviz.rviz
+```
+
+![image](https://user-images.githubusercontent.com/92040822/197100915-7b091667-c5c2-48cf-b1f7-714497bb9299.png)
+
+You can view the frames that tf2 broadcasts in the sidebar. The frames will move in rviz as you maneuver the turtle about.
+
+
